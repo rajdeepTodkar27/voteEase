@@ -1,5 +1,5 @@
 import express from "express"
-import { profilesave,getprofile,registerElection,getEcandidateDetails,giveVote, getResult } from "../controllers/usercontroller.js";
+import { profilesave,getprofile,registerElection,getEcandidateDetails,giveVote, getResult,electionList } from "../controllers/usercontroller.js";
 
 const userrouter=express.Router()
 
@@ -10,15 +10,12 @@ userrouter.get("/", (req,res)=>{
 userrouter.get("/home", (req,res)=>{
         res.send("this is home")
 })
-userrouter.get("/electionregister", (req,res)=>{
-    res.send("this is electionregister")
-})
 
+userrouter.get("/electionregister", electionList)
 userrouter.post("/electionregister", registerElection)
 
 
 userrouter.get("/profile",getprofile)
-
 userrouter.post("/profile", profilesave )
 
 userrouter.get("/vote", getEcandidateDetails)

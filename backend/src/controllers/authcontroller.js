@@ -29,7 +29,7 @@ const signin = async (req, res) => {
             return res.status(400).json({success: false, message: "invalid credential"})
         }
         const token = jwt.sign({id: user._id, role: user.role}, scretekey, {expiresIn: "1h"})
-        res.status(200).json({token})
+        res.status(200).json({token, role:user.role })
     } catch(err){
         res.status(500).json({success: false, message: "somthing went wrong"})
     }

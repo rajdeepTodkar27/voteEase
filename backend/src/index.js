@@ -6,6 +6,7 @@ import userrouter from './routes/userrouter.js'
 import verifytoken from './middlewares/authmid.js'
 import authrole from './middlewares/authrole.js'
 import cors from 'cors'
+import adminrouter from './routes/adminrouter.js'
 const app = express()
 const port= process.env.PORT || 3000
 
@@ -15,7 +16,7 @@ app.use(express.json())
 app.use(cors())
 app.use("/", authrouter)
 app.use("/user",verifytoken,authrole("user","admin"), userrouter)
-
+app.use("/admin", verifytoken,authrole("admin"),adminrouter)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

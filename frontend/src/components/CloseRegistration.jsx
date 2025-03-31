@@ -1,25 +1,33 @@
-import React, { useRef,useEffect,useState } from 'react';
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
-const Eparticipate = () => {
+import React, { useState, useRef,useEffect } from "react";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+const CloseRegistration = (props) => {
   const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm();
-  const formRef = useRef(null);
-  const selectedElection = watch('election', '');
-  const [errorMessage, seterrorMessage] = useState("")
+  const formRef = useRef();
+  const [errorMessage, seterrorMessage] = useState("");
   const [elelist, setelelist] = useState([])
+  
+  const selectedElection = watch("election", '');
 
   useEffect(() => {
-    axios.get("http://localhost:4000/user/electionregister", {headers:{Authorization: `Bearer ${sessionStorage.getItem("token")}`}})
-    .then(res=>{
-        setelelist(res.data.data)
-    })
-    .catch(err=>console.log(err))
-  }, [ ])
+   axios.get(`http://localhost:4000/admin/${props.repo}`,{
+    headers:{
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`
+    }
+   }).then(res=>{
+    console.log(res.data.data);
+    setelelist(res.data.data)
+   }).catch(err=>{
+      console.log(err)
+   })
   
-  const onSubmit = async (data) => {
+  }, [])
+
+
+  const onSubmit = (data) => {
     seterrorMessage("")
-    axios.post("http://localhost:4000/user/electionregister", {
-        eName: data.election
+    axios.put(`http://localhost:4000/admin/${props.repo}`, {
+        electionname: data.election
     }, {
         headers: {
             'Content-Type': 'application/json',
@@ -37,15 +45,16 @@ const Eparticipate = () => {
           alert("Something went wrong: " + err.message);
       }
     })
+    // console.log(data);
+    
     formRef.current.reset();
   };
 
   return (
     <div className='flex justify-center items-center min-h-screen'>
       <div className='bg-white p-6 rounded-lg shadow-lg w-full max-w-md'>
-        <h2 className='text-2xl text-center mb-4'> Election Enrollment</h2>
+        <h2 className='text-2xl text-center mb-4'>{props.name}</h2>
         <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
-          
 
           <div>
             <label className='block text-sm font-medium'>Select an Election</label>
@@ -55,34 +64,32 @@ const Eparticipate = () => {
             >
               <option value=''>Select an election</option>
               {elelist.map((position, index) => (
-          <option  key={index} value={position}>{position}</option>
-        ))}
+                <option key={index} value={position}>{position}</option>
+              ))}
             </select>
             {errors.election && <p className='text-red-500 text-sm'>{errors.election.message}</p>}
           </div>
 
-
           <div className='flex items-center space-x-2 mt-4'>
             <input
               type='checkbox'
-              id='confirmRegister'
+              id='confirmClose'
               className='w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-2 focus:ring-blue-500'
               disabled={!selectedElection}
-              {...register('confirm', { required: "Please confirm your registration" })}
+              {...register('confirm', { required: "Please confirm to close registration" })}
             />
-            <label htmlFor='confirmRegister' className='text-gray-700 text-sm'>
-              Are you sure you want to register for this election?
+            <label htmlFor='confirmClose' className='text-gray-700 text-sm'>
+              {`Are you sure  to ${props.message}?`}
             </label>
           </div>
           {errors.confirm && <p className='text-red-500 text-sm'>{errors.confirm.message}</p>}
-
 
           <button
             type='submit'
             className={`w-full px-4 py-2 rounded-lg ${selectedElection ? 'bg-blue-600 cursor-pointer' : 'bg-gray-400 cursor-not-allowed'} text-white`}
             disabled={!selectedElection || isSubmitting}
           >
-            Confirm Registration
+            {`Confirm ${props.name}`}
           </button>
           {errorMessage && <p className="text-red-500 text-sm">{errorMessage}</p>}
         </form>
@@ -91,4 +98,4 @@ const Eparticipate = () => {
   );
 };
 
-export default Eparticipate;
+export default CloseRegistration;

@@ -10,11 +10,31 @@ const Signin = () => {
   const token = sessionStorage.getItem("token");
 
   useEffect(() => {
-    if (token) {
-      navigate("/user/home"); 
-    }
+    if (!token) return;
+
+    const checkAccess = async () => {
+      try {
+        await axios.get("http://localhost:4000/admin/home", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log("admin");
+        navigate("/admin/home");
+      } catch (adminError) {
+        try {
+          await axios.get("http://localhost:4000/user/home", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          navigate("/user/home");
+        } catch (userError) {
+          console.error("Access Denied:", userError.response?.data?.message || userError.message);
+          alert("Access denied. Please sign in again.");
+        }
+      }
+    };
+
+    checkAccess();
   }, [token, navigate]);
-  
+
   const onSubmit = async (data) => {
     console.log("Form Submitted:", data);
     setErrorMessage("")
@@ -30,7 +50,8 @@ const Signin = () => {
     .then(res => {
       console.log(res.data.token)
       sessionStorage.setItem("token", res.data.token)
-      navigate("/user")
+      res.data.role==="admin" ?navigate("/admin") : navigate("/user")
+      
     })
     .catch(err => {
       if (err.response) {
