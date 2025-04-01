@@ -1,5 +1,5 @@
 import React from "react";
-import { ClipboardList, Lock, Unlock, CheckCircle, Settings } from "lucide-react";
+import { ClipboardList, Lock, Unlock, CheckCircle, Settings, } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function AdminHome() {
@@ -19,6 +19,15 @@ export default function AdminHome() {
         <Settings size={40} className="mb-3" />
         <h2 className="text-xl font-bold">Setup Election</h2>
         <p className="mt-2">Create and configure new elections.</p>
+      </div>
+
+      <div
+        className="w-full md:w-1/4 p-6 bg-blue-600 rounded-lg shadow-md flex flex-col items-center text-center cursor-pointer hover:bg-blue-700 transition"
+        onClick={() => handleNavigation("candidate-verification")}
+      >
+        <ClipboardList size={40} className="mb-3" />
+        <h2 className="text-xl font-bold">Candidate Verification</h2>
+        <p className="mt-2">Reviews and approves or rejects candidate applications.</p>
       </div>
 
       <div

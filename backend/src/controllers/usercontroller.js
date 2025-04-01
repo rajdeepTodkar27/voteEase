@@ -8,7 +8,7 @@ import mongoose from "mongoose";
 
 const profilesave = async (req, res) => {
   const user = await Profile.findOne({ user: req.user.id })
-  console.log(req.body)
+
   if (!user) {
     try {
       const userid = req.user.id
@@ -32,7 +32,7 @@ const profilesave = async (req, res) => {
       phoneno: req.body.phoneno,
       dob: new Date(req.body.dob)
     }
-    console.log(updatedData)
+   
     Profile.findOneAndUpdate(
       { user: req.user.id },
       { $set: updatedData },
@@ -55,7 +55,7 @@ const getprofile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
     }
-    console.log(isProfile)
+   
     if (!isProfile) {
       return res.status(201).json({success:true,
         message: "successfully got the data",            
@@ -64,7 +64,7 @@ const getprofile = async (req, res) => {
         email: user.email}
       }); 
     }
-    console.log("hello")
+  
     res.status(201).json({success:true,
       message: "successfully got the data",      
       data:{id: user._id,
@@ -77,7 +77,6 @@ const getprofile = async (req, res) => {
 
 
   } catch (err) {
-    console.error("Error fetching profile:", err.message);
     res.status(500).json({ success: false, message: "Server error" });
   }
 }
@@ -86,7 +85,7 @@ const electionList=async(req,res)=>{
   try{
     const elist= await Electionlist.find({isRegistration:true})
     if(elist.length===0){
-      return res.status(404).json({success:true, message:"election registration is inactive"})
+      return res.status(404).json({success:false, message:"election registration is inactive"})
     }
     const finallist=[]
     elist.forEach(element => {
@@ -144,9 +143,8 @@ const getEcandidateDetails = async (req, res) => {
     const electionlist=await Electionlist.find({isVoting: true}).select("electionname -_id")
     let earr=[]
     
-    // this if is added and not checked on the postman
     if(electionlist.length===0){
-      return res.status(404).json({success:true, message:"voting is not started"})
+      return res.status(404).json({success:false, message:"voting is not started"})
     }
     electionlist.forEach(ele => {
       earr.push(ele.electionname)
@@ -194,15 +192,13 @@ const giveVote = async (req, res) => {
 }
 
 
-
-// get result is changed and not checked on the postman
 const getResult = async (req, res) => {
   try {
     const listelec= await Electionlist.find({isResult: true}).select("electionname -_id")
     let earr=[]
     
     if(listelec.length===0){
-      return res.status(404).json({success:true, message:"election result is not declared"})
+      return res.status(404).json({success:false, message:"election result is not declared"})
     }
     listelec.forEach(ele => {
       earr.push(ele.electionname)
@@ -211,11 +207,9 @@ const getResult = async (req, res) => {
     const votecount= await Vote.find({eName:{$in: earr}}).populate("candidateName","userName voters")
      
 
-    console.log(listelec)
     if(votecount.length === 0){
-      return res.status(404).json({success: true, message:"No votes found"})
+      return res.status(404).json({success: false, message:"No votes found"})
     }
-    console.log(1) 
     let votingResult={} 
      
     votecount.forEach((ele) => {

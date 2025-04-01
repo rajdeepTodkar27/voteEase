@@ -1,5 +1,5 @@
 import express from "express"
-import { addNewElection,closeRegistration,openVoting,declareResult,closeVoting,closeRegistrationlist,openvotingList,closeVotingList,declareResultList } from "../controllers/admincontroller.js"
+import { addNewElection,closeRegistration,openVoting,declareResult,closeVoting,closeRegistrationlist,openvotingList,closeVotingList,declareResultList,candidateverify,verifyCandidatelist, getcandidateInfo,rejectCApplication } from "../controllers/admincontroller.js"
 const adminrouter=express.Router()
 
 adminrouter.get("/",(req,res)=>{
@@ -10,6 +10,15 @@ adminrouter.get("/home",(req,res)=>{
 })
 
 adminrouter.post("/setup-election", addNewElection);
+
+adminrouter.get("/candidate-verification", candidateverify)  
+
+// adminrouter.get("/candidate-verification/candidates", verifyCandidatelist)  
+adminrouter.get("/candidate-verification/:electionName", verifyCandidatelist)  
+adminrouter.put("/candidate-verification/:electionName", rejectCApplication)  
+
+
+adminrouter.get("/candidate-verification/candidates/info", getcandidateInfo)  
 
 adminrouter.get("/close-registration", closeRegistrationlist)
 adminrouter.put("/close-registration", closeRegistration)
