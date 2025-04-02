@@ -72,8 +72,8 @@ const verifyCandidatelist= async (req,res)=>{
 }
 const getcandidateInfo= async (req,res)=>{
     try {
-        const candidatename= req.headers.candidatename
-        console.log(req.headers);
+        const candidatename= req.body.candidatename
+       
         
         const user = await User.findOne({userName: candidatename})
         const isProfile = await Profile.findOne({ user: user._id })

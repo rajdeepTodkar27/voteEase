@@ -10,7 +10,6 @@ const CandidateVerification = () => {
                 Authorization: `Bearer ${sessionStorage.getItem("token")}`
             }
         }).then(res => {
-            console.log(res.data.data);
 
             setelelist(res.data.data)
         }).catch(err => {
@@ -26,7 +25,7 @@ const CandidateVerification = () => {
 
             <div  className="flex flex-col items-center gap-4 sm:gap-6">
                 {elelist.map((position, index) => (
-                    <div key={index} onClick={()=>handleClick(position)} className="bg-blue-600 p-4  sm:p-6 rounded-lg w-full max-w-2xl ">
+                    <div key={index} onClick={()=>handleClick(position)} className="bg-blue-600 p-4  sm:p-6 rounded-lg cursor-pointer w-full max-w-2xl ">
                         <h2 className="text-white text-lg sm:text-xl font-semibold text-center">{position}</h2>
                     </div>
                 ))}

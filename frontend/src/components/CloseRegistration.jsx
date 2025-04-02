@@ -15,12 +15,10 @@ const CloseRegistration = (props) => {
       Authorization: `Bearer ${sessionStorage.getItem("token")}`
     }
    }).then(res=>{
-    //  console.log(res.data.data);
      setelelist(res.data.data)
     }).catch(err=>{
       console.log(err)
     })
-    // console.log(elelist);
   
   }, [])
 
@@ -46,7 +44,6 @@ const CloseRegistration = (props) => {
           alert("Something went wrong: " + err.message);
       }
     })
-    // console.log(data);
     
     formRef.current.reset();
   };

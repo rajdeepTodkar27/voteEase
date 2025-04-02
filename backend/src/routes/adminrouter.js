@@ -16,6 +16,7 @@ adminrouter.get("/candidate-verification", candidateverify)
 // adminrouter.get("/candidate-verification/candidates", verifyCandidatelist)  
 adminrouter.get("/candidate-verification/:electionName", verifyCandidatelist)  
 adminrouter.put("/candidate-verification/:electionName", rejectCApplication)  
+adminrouter.post("/candidate-verification/:electionName", getcandidateInfo)  
 
 
 adminrouter.get("/candidate-verification/candidates/info", getcandidateInfo)  
